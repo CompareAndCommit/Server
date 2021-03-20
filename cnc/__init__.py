@@ -3,7 +3,6 @@ from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
-import config
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -16,7 +15,7 @@ def page_not_found(e):
 def create_app():
     app = Flask(__name__)  # 모듈명
 
-    app.config.from_object(config)  # app.config 환경 변수
+    app.config.from_envvar('APP_CONFIG_FILE')  # app.config 환경 변수 파일
 
     # FLASK_JSON configuration
     app.config['JSON_ADD_STATUS'] = False
