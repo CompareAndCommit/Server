@@ -19,8 +19,8 @@ def index():
     return 'C&C index'
 
 
-@bp.route('/commits')
-def commit_json():
+@bp.route('/compare_commits')
+def compare_commits():
     StartDate = request.args.get('StartDate')
     EndDate = request.args.get('EndDate')
     MyName = request.args.get('MyName')
@@ -31,6 +31,7 @@ def commit_json():
 
     # 사용자 조회 실패시
     if len(my_data["count"]) == 0 or len(other_data["count"]) == 0:
-        abort(400, description="사용자 조회 실패")  # result code : 400(Bad Request)
+        # abort(400, description="사용자 조회 실패")  # result code : 400(Bad Request)
+        return json_response(isSuccess=False, code=400, message="User not found")
 
     return json_response(isSuccess=True, code=200, message="OK", my_data=my_data, other_data=other_data)
