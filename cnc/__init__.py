@@ -3,6 +3,8 @@ from flask import Flask, render_template
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
+from flask_cors import CORS
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -33,5 +35,8 @@ def create_app():
 
     # 오류 페이지
     app.register_error_handler(404, page_not_found)
+
+    # CORS 설정
+    CORS(app)
 
     return app
