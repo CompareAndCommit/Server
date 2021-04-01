@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request, abort
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 
 from ..scrap.date_count import return_json
+from ..scrap.languages import lang_json
 
 # 데이터베이스 모델
 from cnc.models import Commits
@@ -35,3 +36,26 @@ def compare_commits():
         return json_response(isSuccess=False, code=400, message="User not found")
 
     return json_response(isSuccess=True, code=200, message="OK", my_data=my_data, other_data=other_data)
+
+
+@bp.route('/compare_languages')
+def compare_languages():
+    MyName = request.args.get('MyName')
+    OtherName = request.args.get('OtherName')
+
+    my_data = lang_json(MyName)
+    other_data = lang_json(OtherName)
+
+    # 사용자 조회 실패시
+    if len(my_data["lang"]) == 0 or len(other_data["lang"]) == 0:
+        return json_response(isSuccess=False, code=400, message="User not found")
+
+    no_commit_lang = []
+
+    for lang in other_data['lang']:
+        if lang not in my_data['lang']:
+            no_commit_lang.append(lang)
+
+    return json_response(isSuccess=True, code=200, message="OK", no_commit_lang=no_commit_lang)
+
+
