@@ -9,17 +9,17 @@ def lang_json(name):
     scrap_soup = BeautifulSoup(scrap_url.text, "html.parser")
 
     languages = []
-    attributes = []
+    percentage = []
 
     lang_data = scrap_soup.find_all("text", {"data-testid": "lang-name"})
-    attr_data = scrap_soup.find_all("text", {"x": "215"})
+    pct_data = scrap_soup.find_all("text", {"x": "215"})
 
     for a in lang_data:
         languages.append(a.get_text())
 
-    for a in attr_data:
-        attributes.append(a.get_text())
+    for a in pct_data:
+        percentage.append(a.get_text()[:-1])  # '%' 제거
 
-    data_json = {"lang": languages, "attr": attributes}
+    data_json = {"lang": languages, "pct": percentage}
 
     return data_json

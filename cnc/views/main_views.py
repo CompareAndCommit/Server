@@ -38,6 +38,26 @@ def compare_commits():
     return json_response(isSuccess=True, code=200, message="OK", my_data=my_data, other_data=other_data)
 
 
+@bp.route('/top-five-languages')
+def top_five_languages():
+    MyName = request.args.get('MyName')
+
+    top_five_languages = lang_json(MyName)
+
+    # 사용자 조회 실패시
+    if len(top_five_languages["lang"]) == 0:
+        return json_response(isSuccess=False, code=400, message="User not found")
+
+    if len(top_five_languages['lang']) < 5:
+        top_five_langs = top_five_languages['lang']
+        top_five_pct = top_five_languages['pct']
+        return json_response(isSuccess=True, code=204, message="Not Enough Resource", top_five_langs=top_five_langs, top_five_pct=top_five_pct)
+
+    top_five_langs = top_five_languages['lang'][:5]
+    top_five_pct = top_five_languages['pct'][:5]
+    return json_response(isSuccess=True, code=200, message="OK", top_five_langs=top_five_langs, top_five_pct=top_five_pct)
+
+
 @bp.route('/compare_languages')
 def compare_languages():
     MyName = request.args.get('MyName')
@@ -57,5 +77,3 @@ def compare_languages():
             no_commit_lang.append(lang)
 
     return json_response(isSuccess=True, code=200, message="OK", no_commit_lang=no_commit_lang)
-
-
