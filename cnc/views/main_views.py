@@ -20,7 +20,7 @@ def index():
     return 'C&C index'
 
 
-@bp.route('/compare_commits')
+@bp.route('/compare-commits')
 def compare_commits():
     StartDate = request.args.get('StartDate')
     EndDate = request.args.get('EndDate')
@@ -58,7 +58,7 @@ def top_five_languages():
     return json_response(isSuccess=True, code=200, message="OK", top_five_langs=top_five_langs, top_five_pct=top_five_pct)
 
 
-@bp.route('/compare_languages')
+@bp.route('/compare-languages')
 def compare_languages():
     MyName = request.args.get('MyName')
     OtherName = request.args.get('OtherName')
