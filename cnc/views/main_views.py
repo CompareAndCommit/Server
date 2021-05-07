@@ -81,5 +81,6 @@ def compare_languages():
             repositories.append(get_repository(lang))
             description.append(get_description(lang))
 
-    return json_response(isSuccess=True, code=200, message="OK", no_commit_lang=no_commit_lang,
-                         repositories=repositories, description=description)
+    repo_json = {"repo": repositories, "desc": description}
+
+    return json_response(isSuccess=True, code=200, message="OK", no_commit_lang=no_commit_lang, repository=repo_json)
