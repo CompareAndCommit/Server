@@ -4,6 +4,7 @@ from flask_json import FlaskJSON, JsonError, json_response, as_json
 from ..scrap.date_count import return_json
 from ..scrap.languages import lang_json
 from ..scrap.trend_repo import *
+from ..scrap.trend_dev import *
 
 # 데이터베이스 모델
 from cnc.models import Commits
@@ -74,13 +75,19 @@ def compare_languages():
     no_commit_lang = []
     repositories = []
     description = []
+    names = []
+    ids = []
 
     for lang in other_data['lang']:
         if lang not in my_data['lang']:
             no_commit_lang.append(lang)
             repositories.append(get_repository(lang))
             description.append(get_description(lang))
+            names.append(get_dev_name(lang))
+            ids.append(get_dev_id(lang))
 
     repo_json = {"repo": repositories, "desc": description}
+    dev_json = {"name": names, "id": ids}
 
-    return json_response(isSuccess=True, code=200, message="OK", no_commit_lang=no_commit_lang, repository=repo_json)
+    return json_response(isSuccess=True, code=200, message="OK", no_commit_lang=no_commit_lang,
+                         repository=repo_json, developer=dev_json)
