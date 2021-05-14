@@ -5,6 +5,7 @@ from ..scrap.date_count import return_json
 from ..scrap.languages import lang_json
 from ..scrap.trend_repo import *
 from ..scrap.trend_dev import *
+from ..scrap.exclude_lang import *
 
 # 데이터베이스 모델
 from cnc.models import Commits
@@ -53,11 +54,13 @@ def top_five_languages():
     if len(top_five_languages['lang']) < 5:
         top_five_langs = top_five_languages['lang']
         top_five_pct = top_five_languages['pct']
-        return json_response(isSuccess=True, code=204, message="Not Enough Resource", top_five_langs=top_five_langs, top_five_pct=top_five_pct)
+        return json_response(isSuccess=True, code=204, message="Not Enough Resource", top_five_langs=top_five_langs,
+                             top_five_pct=top_five_pct)
 
     top_five_langs = top_five_languages['lang'][:5]
     top_five_pct = top_five_languages['pct'][:5]
-    return json_response(isSuccess=True, code=200, message="OK", top_five_langs=top_five_langs, top_five_pct=top_five_pct)
+    return json_response(isSuccess=True, code=200, message="OK", top_five_langs=top_five_langs,
+                         top_five_pct=top_five_pct)
 
 
 @bp.route('/compare-languages')
@@ -77,17 +80,24 @@ def compare_languages():
     description = []
     names = []
     ids = []
+    count = 0
 
     for lang in other_data['lang']:
         if lang not in my_data['lang']:
-            no_commit_lang.append(lang)
-            repositories.append(get_repository(lang))
-            description.append(get_description(lang))
-            names.append(get_dev_name(lang))
-            ids.append(get_dev_id(lang))
+            if lang not in excluded_lang:
+                count += 1
+                no_commit_lang.append(lang)
+                repositories.append(get_repository(lang))
+                description.append(get_description(lang))
+                names.append(get_dev_name(lang))
+                ids.append(get_dev_id(lang))
 
     repo_json = {"repo": repositories, "desc": description}
     dev_json = {"name": names, "id": ids}
 
-    return json_response(isSuccess=True, code=200, message="OK", no_commit_lang=no_commit_lang,
-                         repository=repo_json, developer=dev_json)
+    if count == 3:
+        return json_response(isSuccess=True, code=200, message="OK", no_commit_lang=no_commit_lang,
+                             repository=repo_json, developer=dev_json)
+    else:
+        return json_response(isSuccess=True, code=204, message="Not enough Resource", no_commit_lang=no_commit_lang,
+                             repository=repo_json, developer=dev_json)
