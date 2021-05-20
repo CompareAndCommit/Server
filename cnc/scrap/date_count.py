@@ -9,9 +9,20 @@ def return_json(name, start_date, end_date):
     scrap_url = requests.get(URL)
     scrap_soup = BeautifulSoup(scrap_url.text, "html.parser")
 
+    # configuration settings -> Activity Overview
+    activity_overview = scrap_soup.find_all("h5", {"class": "mb-3 text-normal"})
+
+    width = 11
+
+    if activity_overview:  # Activity Overview 세팅이 되어있는 경우
+        width = 10
+
     data_count = []
     data_date = []
-    data = scrap_soup.find_all("rect", {"width": "11"})
+    data = scrap_soup.find_all("rect", {"width": width})
+
+    if activity_overview:  # Activity Overview 세팅이 되어있는 경우
+        data = data[:-5]
 
     for a in data:
         if start_date[0:4] == end_date[0:4] == a["data-date"][0:4]:
