@@ -13,7 +13,7 @@
 - Compare and Commit Server using Flask
 <table align="left">
 <th align="center"> <a href="https://github.com/jhlee508">Jaehwan Lee</a> </th>
-<th align="center"> <a href="https://github.com/Seojinseojin">Ikgyu Lee</a> </th>
+<th align="center"> <a href="https://github.com/IkGyu-Lee">Ikgyu Lee</a> </th>
 <tr>
     <td align="center">
         <a href="https://github.com/jhlee508"><img src="https://github.com/jhlee508.png" width="200"/></a>
